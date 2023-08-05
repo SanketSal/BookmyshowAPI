@@ -96,4 +96,38 @@ async function bookSeatsHandler(req, res) {
     // Fetch the selected showtime and associated seats
     const showtime = await Showtime.findByPk(showtime_id, {
       include: [Seat],
-   
+    });
+
+    // Check if any of the selected seats are already booked
+    const alreadyBookedSeats = showtime.Seats.filter((seat) =>
+      seats.includes(seat.seat_number) && seat.is_booked
+    );
+
+    if (alreadyBookedSeats.length > 0) {
+      return res.status(400).json({ error: 'Some seats are already booked' });
+    }
+
+    // Update seat booking status in the database and Redis cache
+    const bookedSeats = await Seat.update(
+      { is_booked: true },
+      {
+        where: {
+          showtime_id: showtime_id,
+          seat_number: { [Op.in]: seats },
+        },
+        returning: true,
+      }
+    );
+
+    // Update Redis cache with the latest seat booking status
+    await updateRedisCache(showtime_id, bookedSeats.map((seat) => seat.seat_number));
+
+    console.log('Seats booked successfully');
+    res.json({ message: 'Seats booked successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+module.exports = { getDatesHandler, getMoviesHandler, bookSeatsHandler };
