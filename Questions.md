@@ -26,7 +26,7 @@ It's important to note that adding indexes also comes with some trade-offs. Whil
 
 To make an informed decision, it's best to analyze the API's query patterns and usage patterns over time, and consider using database monitoring tools to identify which queries are causing performance bottlenecks. This will help in making data-driven decisions on which columns to index for optimal API performance.
 
-** Q2. You have noticed that even after indexing the columns the API speed isn’t under 100 ms. Update the code of existing API to cache the appropriate data in the redis. What all data would you cache and why ?**
+**Q2. You have noticed that even after indexing the columns the API speed isn’t under 100 ms. Update the code of existing API to cache the appropriate data in the redis. What all data would you cache and why ?**
 
 To further improve the API speed and reduce response times, we can implement caching using Redis. Caching frequently requested data can significantly reduce the number of database queries and improve the overall API performance. Here's what data we can cache in Redis and why:
 
