@@ -15,6 +15,8 @@ const Theatre = sequelize.define('Theatre', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+ {
+  indexes: [{ fields: ['theatre_id'] }], // Index on theatre_id
 });
 
 const Movie = sequelize.define('Movie', {
@@ -26,6 +28,8 @@ const Movie = sequelize.define('Movie', {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  {
+  indexes: [{ fields: ['movie_id'] }], // Index on movie_id
 });
 
 const Showtime = sequelize.define('Showtime', {
@@ -37,6 +41,8 @@ const Showtime = sequelize.define('Showtime', {
     type: DataTypes.TIME,
     allowNull: false,
   },
+  {
+  indexes: [{ fields: ['show_date'] }], // Index on show_date
 });
 
 const Seat = sequelize.define('Seat', {
@@ -48,6 +54,8 @@ const Seat = sequelize.define('Seat', {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
+ {
+  indexes: [{ fields: ['showtime_id', 'seat_number'], unique: true }], // Composite index on showtime_id and seat_number
 });
 
 // Define Associations
