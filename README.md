@@ -10,8 +10,6 @@ The Theatre Booking API provides endpoints to access and manage movie showtimes 
 - [API Endpoints](#api-endpoints)
 - [Caching](#caching)
 - [Database Configuration](#database-configuration)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Getting Started
 
