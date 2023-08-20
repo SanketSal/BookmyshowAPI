@@ -1,6 +1,6 @@
-# Theatre Booking API
+# BookMyShow API
 
-The Theatre Booking API provides endpoints to access and manage movie showtimes and seat bookings in various theatres. Users can view showtimes for the next 7 days, select a specific date to see the available movies and their showtimes in a chosen theatre, and book seats for a show.
+Welcome to the BookMyShow API! This API provides a backend for managing theatres, movies, showtimes, seat bookings, and more. It also allows users to retrieve movie details, add and retrieve comments and ratings, and search for movies and theatres with filters.
 
 ## Table of Contents
 
@@ -8,82 +8,135 @@ The Theatre Booking API provides endpoints to access and manage movie showtimes 
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
 - [API Endpoints](#api-endpoints)
-- [Caching](#caching)
-- [Database Configuration](#database-configuration)
+  - [Retrieve Movie Details](#retrieve-movie-details)
+  - [Comments and Ratings](#comments-and-ratings)
+  - [Search Movies and Theatres](#search-movies-and-theatres)
+- [Configuration](#configuration)
+- [Database](#database)
+- [Redis](#redis)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Getting Started
 
 ### Prerequisites
 
-To run the API, you'll need the following installed on your system:
+Before you begin, ensure you have met the following requirements:
 
-- Node.js (https://nodejs.org)
-- MySQL Server (https://www.mysql.com/)
-- Redis (https://redis.io/)
+- Node.js and npm installed.
+- MySQL database for theatre, movie, showtime, and seat data.
+- MongoDB for comments and ratings data.
+- Redis for caching data.
+- Clone this repository to your local machine.
 
 ### Installation
 
 1. Clone the repository:
 
-```bash
-git clone https://github.com/SanketSal/BookmyshowAPI.git
-cd theatre-booking-api
-```
+   ```bash
+   git clone https://github.com/your-username/bookmyshow-api.git
+   ```
 
-2. Install the dependencies:
+2. Install dependencies:
 
-```bash
-npm install
-```
+   ```bash
+   cd bookmyshow-api
+   npm install
+   ```
 
-3. Set up the MySQL and Redis configuration:
+3. Set up your database configurations in the `.env` file.
 
-   - Open the `models.js` file in the `models` directory and update the database connection details (`your_database_name`, `your_mysql_username`, and `your_mysql_password`).
+4. Start the API server:
 
-   - Make sure your Redis server is running on the default port (6379). If not, update the Redis configuration in the `helpers.js` file.
-
-4. Start the API:
-
-```bash
-npm start
-```
-
-By default, the API will run on http://localhost:3000. You can change the port by setting the `PORT` environment variable.
+   ```bash
+   npm start
+   ```
 
 ## API Endpoints
 
-The API provides the following endpoints:
+### Retrieve Movie Details
 
-1. **Get Dates for a Theatre**
+#### `GET /movies/:movie_id/details`
 
-   - `GET /theatres/:theatre_id/dates`
+Retrieve static movie details such as Name, Cast, Crew, Movie Plot, Runtime, Language, Genre, etc.
 
-   - Returns the dates of the next 7 days for a given theatre.
+### Comments and Ratings
 
-2. **Get Movies and Showtimes**
+#### Add a Comment
 
-   - `GET /theatres/:theatre_id/movies/:show_date`
+#### `POST /movies/:movie_id/comments`
 
-   - Returns the available movies and their showtimes for a specific date and theatre.
+Add a comment for a specific movie.
 
-3. **Book Seats**
+**Request Body:**
 
-   - `POST /theatres/:theatre_id/movies/:showtime_id/book`
+```json
+{
+  "text": "Your comment here"
+}
+```
 
-   - Books seats for a given theatre, movie showtime, and selected seats.
+#### Get Comments
 
-## Caching
+#### `GET /movies/:movie_id/comments`
 
-The API uses Redis as a caching mechanism to store frequently accessed data and reduce the number of database queries. The following data is cached:
+Retrieve comments for a specific movie.
 
-- Theatre dates for the next 7 days for each theatre.
-- Movies and showtimes for a specific date and theatre.
-- Showtime details, including available seats and booking status.
+#### Add a Rating
 
-The caching helps improve API response times and reduces the load on the database.
+#### `POST /movies/:movie_id/ratings`
 
-## Database Configuration
+Add a rating for a specific movie.
 
-The API uses MySQL as the database. To set up the database, ensure you have a running MySQL server and update the database connection details in the `models.js` file.
+**Request Body:**
 
-The required database tables and associations will be automatically created and synced when the API starts.
+```json
+{
+  "rating": 4.5
+}
+```
+
+#### Get Ratings
+
+#### `GET /movies/:movie_id/ratings`
+
+Retrieve ratings for a specific movie.
+
+### Search Movies and Theatres
+
+#### `GET /search?q=:query&language=:language&genre=:genre&format=:format`
+
+Search for movies and theatres with filters.
+
+**Query Parameters:**
+
+- `q`: Search query (required)
+- `language`: Language filter (optional)
+- `genre`: Genre filter (optional)
+- `format`: Format filter (optional)
+
+## Configuration
+
+Configure your application by setting the necessary environment variables in the `.env` file. Example:
+
+```plaintext
+PORT=3000
+DATABASE_URL=mysql://your-db-username:your-db-password@localhost:3306/your-database-name
+MONGODB_URI=mongodb://localhost:27017/bookmyshow
+REDIS_URL=redis://localhost:6379
+```
+
+## Database
+
+This application uses MySQL for theatre, movie, showtime, and seat data, and MongoDB for comments and ratings data. Ensure you have both databases set up and configured with appropriate schemas.
+
+## Redis
+
+Redis is used for caching data to improve API response times. Make sure you have Redis installed and running on your server. The default Redis URL is `redis://localhost:6379`.
+
+## Usage
+
+- Use the provided API endpoints to interact with the application.
+- Refer to the API documentation for details on request and response formats.
+
