@@ -1,8 +1,10 @@
 const express = require('express');
-const { getMovieDetailsHandler } = require('./handlers');
+const { addCommentHandler, getCommentsHandler, addRatingHandler, getRatingsHandler } = require('./handlers');
 const router = express.Router();
 
-// Define your routes here
-router.get('/movies/:movie_id/details', getMovieDetailsHandler);
+router.post('/movies/:movie_id/comments', addCommentHandler);
+router.get('/movies/:movie_id/comments', getCommentsHandler);
+router.post('/movies/:movie_id/ratings', addRatingHandler);
+router.get('/movies/:movie_id/ratings', getRatingsHandler);
 
 module.exports = router;
