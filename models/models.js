@@ -1,77 +1,34 @@
-const { Sequelize, DataTypes, Op } = require('sequelize');
-
-const sequelize = new Sequelize('your_database_name', 'your_mysql_username', 'your_mysql_password', {
-  host: 'localhost',
-  dialect: 'mysql',
-});
-
-// Define Models
-const Theatre = sequelize.define('Theatre', {
+const MovieDetail = sequelize.define('MovieDetail', {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  location: {
+  cast: {
     type: DataTypes.STRING,
     allowNull: false,
   },
- {
-  indexes: [{ fields: ['theatre_id'] }], // Index on theatre_id
-});
-
-const Movie = sequelize.define('Movie', {
-  title: {
+  crew: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  duration: {
+  plot: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  runtime: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  {
-  indexes: [{ fields: ['movie_id'] }], // Index on movie_id
-});
-
-const Showtime = sequelize.define('Showtime', {
-  show_date: {
-    type: DataTypes.DATEONLY,
+  language: {
+    type: DataTypes.STRING,
     allowNull: false,
   },
-  show_time: {
-    type: DataTypes.TIME,
+  genre: {
+    type: DataTypes.STRING,
     allowNull: false,
   },
-  {
-  indexes: [{ fields: ['show_date'] }], // Index on show_date
+  // Add other attributes as needed
 });
 
-const Seat = sequelize.define('Seat', {
-  seat_number: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  is_booked: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
- {
-  indexes: [{ fields: ['showtime_id', 'seat_number'], unique: true }], // Composite index on showtime_id and seat_number
-});
-
-// Define Associations
-Theatre.hasMany(Showtime, { foreignKey: 'theatre_id' });
-Movie.hasMany(Showtime, { foreignKey: 'movie_id' });
-Showtime.hasMany(Seat, { foreignKey: 'showtime_id' });
-
-// Sync the models with the database
-(async () => {
-  try {
-    await sequelize.authenticate();
-    await sequelize.sync();
-    console.log('Database connected and models synced.');
-  } catch (error) {
-    console.error('Error connecting to the database:', error);
-  }
-})();
-
-module.exports = { Theatre, Movie, Showtime, Seat };
+// Define association with Movie model (assuming each Movie has a corresponding MovieDetail)
+Movie.hasOne(MovieDetail, { foreignKey: 'movie_id' });
